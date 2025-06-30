@@ -1,0 +1,18 @@
+{
+  "name": "playwright-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.53.1",
+    "@types/node": "^24.0.3"
+  },
+  "dependencies": {
+    "automateITApi": "file:APICalls-1.0.tgz",
+    "axios": "^1.10.0"
+  }
+}
