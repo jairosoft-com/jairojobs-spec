@@ -443,6 +443,7 @@ test.describe("Job Portal API Tests", () => {
       expect([401, 403]).toContain(response.status());
     });
 
+// [MermaidChart: ae395ba2-7d5a-4ab8-8db6-43b2396745b2]
     test("should handle invalid pagination parameters", async ({ request }) => {
       const response = await request.get(`${API_BASE_URL}/jobs?page=-1&limit=0`, {
         headers: {
