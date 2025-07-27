@@ -2,7 +2,10 @@
   "name": "playwright-demo",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "playwright test",
+    "mock": "prism mock spec-docs/features/user_stories/01_view_job_listing/openapi.yaml"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
