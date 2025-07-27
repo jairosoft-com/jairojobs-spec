@@ -8,10 +8,10 @@ const automateITFactory = AutomateItControllerApiFactory(
 
 test("has title", async ({ page }) => {
   await page.goto("https://playwright.dev/");
-  const response = await automateITFactory.getAutomateITPhrase("123");
-  console.log(response.data);
+  //const response = await automateITFactory.getAutomateITPhrase("123");
+  //console.log(response.data);
   // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
+  await expect(page).toHaveTitle('Fast and reliable end-to-end testing for modern web apps | Playwright');
 });
 
 test("get started link", async ({ page }) => {
