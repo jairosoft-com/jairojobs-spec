@@ -7,7 +7,7 @@ info:
     name: JairoJobs Support
     email: support@jairojobs.com
 servers:
-  - url: http://localhost:3000/v1 # Or whatever port your local server uses
+  - url: http://localhost:4010/v1 # Aligned with Prism's default port
     description: Local Development Server
   - url: https://api.jairojobs.com/v1
     description: Production Server
