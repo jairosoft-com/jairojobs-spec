@@ -60,6 +60,7 @@ test.describe("Job Portal API Tests", () => {
 
       expect(response.status()).toBe(200);
       const responseBody = await response.json();
+      console.log(responseBody);
       
       expect(responseBody).toHaveProperty("jobs");
       expect(Array.isArray(responseBody.jobs)).toBeTruthy();
