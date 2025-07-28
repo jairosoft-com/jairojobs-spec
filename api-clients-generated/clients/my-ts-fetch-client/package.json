@@ -16,6 +16,6 @@
   "dependencies": {
     "@types/node": "^24.1.0",
     "fetch": "^1.1.0",
-    "jairojobsapi": "file:../../generated-sdks/ts-fetch-client"
+    "jairojobsapi": "file:../../generated-sdks/ts-fetch-client/ts-fetch-client-1.0.0.tgz"
   }
 }
