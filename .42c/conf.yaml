@@ -1,3 +1,5 @@
 apis:
   spec-docs/features/user_stories/01_view_job_listing/openapi_spec.yaml:
     alias: job-portal-api
+  spec-docs/features/user_stories/01_view_job_listing/openapi.yaml:
+    alias: job-portal-api1

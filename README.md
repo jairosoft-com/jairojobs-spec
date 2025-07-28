@@ -96,3 +96,4 @@ npx playwright test --ui
 - [https://medium.com/@dxloop/contract-first-approach-with-node-js-and-openapi-for-rest-services-d2283a7ffd9d](https://medium.com/@dxloop/contract-first-approach-with-node-js-and-openapi-for-rest-services-d2283a7ffd9d)
 - [https://cloud.google.com/apis/design](https://cloud.google.com/apis/design)
 - [https://github.com/microsoft/api-guidelines](https://github.com/microsoft/api-guidelines)
+- [https://marketplace.visualstudio.com/items?itemName=42Crunch.vscode-openapi](https://marketplace.visualstudio.com/items?itemName=42Crunch.vscode-openapi)
