@@ -7,7 +7,7 @@ info:
     name: JairoJobs Support
     email: support@jairojobs.com
 servers:
-  - url: http://localhost:4010/v1 # Aligned with Prism's default port
+  - url: http://localhost:4010/v1
     description: Local Development Server
   - url: https://api.jairojobs.com/v1
     description: Production Server
@@ -153,59 +153,62 @@ components:
       allOf:
         - $ref: "#/components/schemas/Job"
       example:
-        id: "789b1234-c56d-78e9-f012-345678901234"
-        title: "Senior Software Engineer - Backend"
-        company: "InnovateTech Inc."
-        companyId: "comp-789"
-        companyLogo: "https://via.placeholder.com/200x80/28A745/FFFFFF?text=InnovateTech"
-        location: "Austin, TX"
-        type: "full-time"
-        experienceLevel: "senior"
-        remoteOption: "remote"
+        id: 789b1234-c56d-78e9-f012-345678901234
+        title: Senior Software Engineer - Backend
+        company: InnovateTech Inc.
+        companyId: comp-789
+        companyLogo: https://via.placeholder.com/200x80/28A745/FFFFFF?text=InnovateTech
+        location: Austin, TX
+        type: full-time
+        experienceLevel: senior
+        remoteOption: remote
         salary:
           min: 140000
           max: 200000
-          currency: "USD"
-          period: "yearly"
-        description: "Join our dynamic backend engineering team to build scalable, high-performance systems that power our platform serving millions of users. You'll work with cutting-edge technologies and contribute to architectural decisions that shape our technical future."
+          currency: USD
+          period: yearly
+        description: Join our dynamic backend engineering team to build scalable,
+          high-performance systems that power our platform serving millions of
+          users. You'll work with cutting-edge technologies and contribute to
+          architectural decisions that shape our technical future.
         requirements:
-          - "7+ years of backend development experience"
-          - "Expert knowledge of Python, Go, or Java"
-          - "Strong experience with microservices architecture"
-          - "Proficiency with containerization (Docker, Kubernetes)"
-          - "Experience with cloud platforms (AWS preferred)"
-          - "Knowledge of distributed systems and message queues"
-          - "Strong database design skills (PostgreSQL, Redis)"
-          - "Experience with monitoring and observability tools"
+          - 7+ years of backend development experience
+          - Expert knowledge of Python, Go, or Java
+          - Strong experience with microservices architecture
+          - Proficiency with containerization (Docker, Kubernetes)
+          - Experience with cloud platforms (AWS preferred)
+          - Knowledge of distributed systems and message queues
+          - Strong database design skills (PostgreSQL, Redis)
+          - Experience with monitoring and observability tools
         responsibilities:
-          - "Design and implement robust backend services and APIs"
-          - "Lead technical discussions and architectural decisions"
-          - "Mentor junior engineers and conduct code reviews"
-          - "Optimize system performance and scalability"
-          - "Collaborate with frontend and DevOps teams"
-          - "Participate in on-call rotation for production support"
-          - "Drive adoption of best practices and new technologies"
+          - Design and implement robust backend services and APIs
+          - Lead technical discussions and architectural decisions
+          - Mentor junior engineers and conduct code reviews
+          - Optimize system performance and scalability
+          - Collaborate with frontend and DevOps teams
+          - Participate in on-call rotation for production support
+          - Drive adoption of best practices and new technologies
         benefits:
-          - "Competitive salary with performance bonuses"
-          - "Comprehensive health, dental, vision, and mental health coverage"
-          - "100% remote work with flexible hours"
-          - "$5,000 annual learning and development budget"
-          - "Stock options with high growth potential"
-          - "Unlimited PTO and sabbatical program"
-          - "Top-tier equipment and home office setup allowance"
-          - "Annual company retreats and team building events"
+          - Competitive salary with performance bonuses
+          - Comprehensive health, dental, vision, and mental health coverage
+          - 100% remote work with flexible hours
+          - $5,000 annual learning and development budget
+          - Stock options with high growth potential
+          - Unlimited PTO and sabbatical program
+          - Top-tier equipment and home office setup allowance
+          - Annual company retreats and team building events
         tags:
-          - "Python"
-          - "Go"
-          - "Microservices"
-          - "AWS"
-          - "Kubernetes"
-          - "Backend"
-          - "Senior"
-          - "Remote"
-          - "API Design"
-        postedAt: "2025-07-20T14:30:00Z"
-        applicationDeadline: "2025-08-20T23:59:59Z"
+          - Python
+          - Go
+          - Microservices
+          - AWS
+          - Kubernetes
+          - Backend
+          - Senior
+          - Remote
+          - API Design
+        postedAt: 2025-07-20T14:30:00Z
+        applicationDeadline: 2025-08-20T23:59:59Z
         applicants: 78
         featured: true
         active: true
@@ -281,52 +284,56 @@ components:
           description: Whether the job is active or not.
           example: true
       example:
-        id: "123e4567-e89b-12d3-a456-426614174000"
-        title: "Senior Full Stack Developer"
-        company: "TechCorp Solutions"
-        companyId: "comp-456"
-        companyLogo: "https://via.placeholder.com/200x80/4A90E2/FFFFFF?text=TechCorp"
-        location: "San Francisco, CA"
-        type: "full-time"
-        experienceLevel: "senior"
-        remoteOption: "hybrid"
+        id: 123e4567-e89b-12d3-a456-426614174000
+        title: Senior Full Stack Developer
+        company: TechCorp Solutions
+        companyId: comp-456
+        companyLogo: https://via.placeholder.com/200x80/4A90E2/FFFFFF?text=TechCorp
+        location: San Francisco, CA
+        type: full-time
+        experienceLevel: senior
+        remoteOption: hybrid
         salary:
           min: 120000
           max: 180000
-          currency: "USD"
-          period: "yearly"
-        description: "We are seeking a talented Senior Full Stack Developer to join our growing engineering team. You will be responsible for developing and maintaining web applications using modern technologies and best practices."
+          currency: USD
+          period: yearly
+        description: We are seeking a talented Senior Full Stack Developer to join our
+          growing engineering team. You will be responsible for developing and
+          maintaining web applications using modern technologies and best
+          practices.
         requirements:
-          - "5+ years of experience in full-stack development"
-          - "Strong proficiency in JavaScript, TypeScript, and React"
-          - "Experience with Node.js and Express.js"
-          - "Knowledge of SQL and NoSQL databases"
-          - "Experience with cloud platforms (AWS, GCP, or Azure)"
-          - "Understanding of CI/CD pipelines and DevOps practices"
+          - 5+ years of experience in full-stack development
+          - Strong proficiency in JavaScript, TypeScript, and React
+          - Experience with Node.js and Express.js
+          - Knowledge of SQL and NoSQL databases
+          - Experience with cloud platforms (AWS, GCP, or Azure)
+          - Understanding of CI/CD pipelines and DevOps practices
         responsibilities:
-          - "Design and develop scalable web applications"
-          - "Collaborate with cross-functional teams to define and implement new features"
-          - "Write clean, maintainable, and well-documented code"
-          - "Participate in code reviews and mentor junior developers"
-          - "Optimize applications for maximum speed and scalability"
-          - "Stay up-to-date with emerging technologies and industry trends"
+          - Design and develop scalable web applications
+          - Collaborate with cross-functional teams to define and implement new
+            features
+          - Write clean, maintainable, and well-documented code
+          - Participate in code reviews and mentor junior developers
+          - Optimize applications for maximum speed and scalability
+          - Stay up-to-date with emerging technologies and industry trends
         benefits:
-          - "Competitive salary and equity package"
-          - "Comprehensive health, dental, and vision insurance"
-          - "Flexible work arrangements and remote work options"
-          - "Professional development budget for conferences and courses"
-          - "401(k) matching program"
-          - "Unlimited PTO policy"
+          - Competitive salary and equity package
+          - Comprehensive health, dental, and vision insurance
+          - Flexible work arrangements and remote work options
+          - Professional development budget for conferences and courses
+          - 401(k) matching program
+          - Unlimited PTO policy
         tags:
-          - "JavaScript"
-          - "TypeScript"
-          - "React"
-          - "Node.js"
-          - "Full Stack"
-          - "Senior"
-          - "Hybrid"
-        postedAt: "2025-07-15T09:30:00Z"
-        applicationDeadline: "2025-08-15T23:59:59Z"
+          - JavaScript
+          - TypeScript
+          - React
+          - Node.js
+          - Full Stack
+          - Senior
+          - Hybrid
+        postedAt: 2025-07-15T09:30:00Z
+        applicationDeadline: 2025-08-15T23:59:59Z
         applicants: 42
         featured: true
         active: true
@@ -380,18 +387,32 @@ components:
           $ref: "#/components/schemas/Pagination"
       example:
         jobs:
-          - id: string
-            title: string
-            company: string
-            location: string
+          - id: "1"
+            title: Senior Full Stack Developer
+            company: TechCorp Solutions
+            location: San Francisco, CA
             type: full-time
-            remoteOption: on-site
-            postedAt: 2025-07-27T10:18:08.0993652Z
+            remoteOption: hybrid
+            postedAt: 2025-01-15T00:00:00.000Z
+          - id: "2"
+            title: Frontend Engineer
+            company: StartupHub
+            location: New York, NY
+            type: full-time
+            remoteOption: remote
+            postedAt: 2025-01-20T00:00:00.000Z
+          - id: "3"
+            title: "DevOps Engineer"
+            company: "Global Health Systems"
+            location: "Boston, MA"
+            type: "full-time"
+            remoteOption: "hybrid"
+            postedAt: "2025-01-18T00:00:00.000Z"
         pagination:
-          total: 50
-          page: 50
-          limit: 50
-          totalPages: 50
+          total: 3
+          page: 1
+          limit: 10
+          totalPages: 1
     SearchAndListJobsResponse200JsonJobs:
       type: array
       maxItems: 100

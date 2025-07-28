@@ -1,0 +1,9 @@
+version: '3'
+
+tasks:
+  prism-mock:
+    desc: "Run Prism mock server on the job-listing OpenAPI spec"
+    cmds:
+      - prism mock spec-docs/features/user_stories/01_view_job_listing/openapi.yaml --port 4010
+    silent: false
+    # run in background by prefixing with '&' if desired

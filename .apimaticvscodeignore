@@ -18,3 +18,8 @@ wrapper.ts
 spec-docs/features/user_stories/01_view_job_listing/user_flow.md
 spec-docs/features/user_stories/01_view_job_listing/user_story.md
 api-docs/api-docs.json
+converter.js
+ArtificalIntelligenceApi/**
+api-docs/**
+spec-docs/features/user_stories/01_view_job_listing/data.json
+spec-docs/features/user_stories/01_view_job_listing/data.ts

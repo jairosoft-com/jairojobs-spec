@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-const API_BASE_URL = "http://localhost:3000/v1";
+const API_BASE_URL = "http://localhost:4010/v1";
 const API_KEY = "test-api-key-123"; // Replace with your actual API key
 
 test.describe("Job Portal API Tests", () => {
@@ -35,15 +35,15 @@ test.describe("Job Portal API Tests", () => {
       if (responseBody.jobs.length > 0) {
         const job = responseBody.jobs[0];
         expect(job).toHaveProperty("id");
-        expect(job).toHaveProperty("jobTitle");
-        expect(job).toHaveProperty("companyName");
+        expect(job).toHaveProperty("title");
+        expect(job).toHaveProperty("company");
         expect(job).toHaveProperty("location");
-        expect(job).toHaveProperty("jobType");
+        expect(job).toHaveProperty("type");
         expect(job).toHaveProperty("remoteOption");
         expect(job).toHaveProperty("postedAt");
         
         // Validate enum values
-        expect(["full-time", "part-time", "contract", "internship"]).toContain(job.jobType);
+        expect(["full-time", "part-time", "contract", "internship"]).toContain(job.type);
         expect(["on-site", "hybrid", "remote"]).toContain(job.remoteOption);
         
         // Validate date format
