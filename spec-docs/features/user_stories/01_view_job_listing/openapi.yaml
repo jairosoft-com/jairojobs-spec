@@ -147,7 +147,7 @@ paths:
       parameters:
         - name: jobId
           in: path
-          required: true # Only 'true' is valid for path parameters
+          required: true
           description: ID of the job to retrieve.
           schema:
             type: string
