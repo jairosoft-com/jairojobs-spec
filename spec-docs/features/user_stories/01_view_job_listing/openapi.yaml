@@ -119,11 +119,11 @@ components:
           type: string
           description: Unique identifier for the job.
           example: string
-        jobTitle:
+        title:
           type: string
           description: The title of the job.
           example: string
-        companyName:
+        company:
           type: string
           description: The name of the company posting the job.
           example: string
@@ -131,7 +131,7 @@ components:
           type: string
           description: The location of the job.
           example: string
-        jobType:
+        type:
           $ref: "#/components/schemas/JobSummaryJobType"
         remoteOption:
           $ref: "#/components/schemas/JobSummaryRemoteOption"
@@ -142,10 +142,10 @@ components:
           example: 2025-07-27T10:18:08.1029505Z
       example:
         id: string
-        jobTitle: string
-        companyName: string
+        title: string
+        company: string
         location: string
-        jobType: full-time
+        type: full-time
         remoteOption: on-site
         postedAt: 2025-07-27T10:18:08.0993652Z
     JobDetail:
@@ -154,12 +154,12 @@ components:
         - $ref: "#/components/schemas/Job"
       example:
         id: "789b1234-c56d-78e9-f012-345678901234"
-        jobTitle: "Senior Software Engineer - Backend"
-        companyName: "InnovateTech Inc."
+        title: "Senior Software Engineer - Backend"
+        company: "InnovateTech Inc."
         companyId: "comp-789"
         companyLogo: "https://via.placeholder.com/200x80/28A745/FFFFFF?text=InnovateTech"
         location: "Austin, TX"
-        jobType: "full-time"
+        type: "full-time"
         experienceLevel: "senior"
         remoteOption: "remote"
         salary:
@@ -167,7 +167,7 @@ components:
           max: 200000
           currency: "USD"
           period: "yearly"
-        jobDescription: "Join our dynamic backend engineering team to build scalable, high-performance systems that power our platform serving millions of users. You'll work with cutting-edge technologies and contribute to architectural decisions that shape our technical future."
+        description: "Join our dynamic backend engineering team to build scalable, high-performance systems that power our platform serving millions of users. You'll work with cutting-edge technologies and contribute to architectural decisions that shape our technical future."
         requirements:
           - "7+ years of backend development experience"
           - "Expert knowledge of Python, Go, or Java"
@@ -217,11 +217,11 @@ components:
           type: string
           description: Unique identifier for the job.
           example: "1"
-        jobTitle:
+        title:
           type: string
           description: The title of the job.
           example: Senior Full Stack Developer
-        companyName:
+        company:
           type: string
           description: The name of the company posting the job.
           example: TechCorp Solutions
@@ -238,7 +238,7 @@ components:
           type: string
           description: The location of the job.
           example: San Francisco, CA
-        jobType:
+        type:
           $ref: "#/components/schemas/JobJobType"
         experienceLevel:
           $ref: "#/components/schemas/JobExperienceLevel"
@@ -246,7 +246,7 @@ components:
           $ref: "#/components/schemas/JobRemoteOption"
         salary:
           $ref: "#/components/schemas/JobSalary"
-        jobDescription:
+        description:
           type: string
           description: The full description of the job.
           example: string
@@ -282,12 +282,12 @@ components:
           example: true
       example:
         id: "123e4567-e89b-12d3-a456-426614174000"
-        jobTitle: "Senior Full Stack Developer"
-        companyName: "TechCorp Solutions"
+        title: "Senior Full Stack Developer"
+        company: "TechCorp Solutions"
         companyId: "comp-456"
         companyLogo: "https://via.placeholder.com/200x80/4A90E2/FFFFFF?text=TechCorp"
         location: "San Francisco, CA"
-        jobType: "full-time"
+        type: "full-time"
         experienceLevel: "senior"
         remoteOption: "hybrid"
         salary:
@@ -295,7 +295,7 @@ components:
           max: 180000
           currency: "USD"
           period: "yearly"
-        jobDescription: "We are seeking a talented Senior Full Stack Developer to join our growing engineering team. You will be responsible for developing and maintaining web applications using modern technologies and best practices."
+        description: "We are seeking a talented Senior Full Stack Developer to join our growing engineering team. You will be responsible for developing and maintaining web applications using modern technologies and best practices."
         requirements:
           - "5+ years of experience in full-stack development"
           - "Strong proficiency in JavaScript, TypeScript, and React"
@@ -381,10 +381,10 @@ components:
       example:
         jobs:
           - id: string
-            jobTitle: string
-            companyName: string
+            title: string
+            company: string
             location: string
-            jobType: full-time
+            type: full-time
             remoteOption: on-site
             postedAt: 2025-07-27T10:18:08.0993652Z
         pagination:
@@ -400,10 +400,10 @@ components:
         $ref: "#/components/schemas/JobSummary"
       example:
         - id: string
-          jobTitle: string
-          companyName: string
+          title: string
+          company: string
           location: string
-          jobType: full-time
+          type: full-time
           remoteOption: on-site
           postedAt: 2025-07-27T10:18:08.0993652Z
     JobSalary:
