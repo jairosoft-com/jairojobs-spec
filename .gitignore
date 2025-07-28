@@ -10,4 +10,6 @@ node_modules/
 .history/
 
 # MacOS
-.DS_Store/.DS_Store
+.DS_Store/
+.DS_Store
+.DS_Store
