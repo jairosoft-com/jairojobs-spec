@@ -6,9 +6,15 @@ This is a **Node.js Express server** for the JairoJobs.com job portal MVP, gener
 
 ## 📋 **Prerequisites**
 
+### **Local Development**
 - **Node.js** >= 10.6
 - **NPM** >= 6.10.0
 - **Java** 1.8+ (for OpenAPI Generator)
+
+### **Docker Development**
+- **Docker Engine** 20.10+
+- **Docker Compose** 2.0+
+- **At least 2GB RAM** and **10GB disk space**
 
 ## 🏗️ **Architecture & Design**
 
@@ -44,7 +50,14 @@ nodejs-express-server/
 ├── expressServer.js              # Express server setup and middleware
 ├── index.js                      # Application entry point
 ├── logger.js                     # Winston logging configuration
-└── package.json                  # Dependencies and scripts
+├── package.json                  # Dependencies and scripts
+├── Dockerfile                    # Production Docker configuration
+├── Dockerfile.dev                # Development Docker configuration
+├── docker-compose.yml            # Full stack with API and PostgreSQL
+├── docker-compose.override.yml   # Development overrides
+├── .dockerignore                 # Docker build exclusions
+├── init-db.sql                  # Database initialization script
+└── DOCKER.md                     # Comprehensive Docker documentation
 ```
 
 ## 🔧 **Core Components**
@@ -193,7 +206,55 @@ nodejs-express-server/
 
 ## 🚀 **Getting Started**
 
-### **1. Installation**
+### **Option 1: Docker (Recommended)**
+
+#### **Quick Start with Docker**
+```bash
+# Clone the repository
+git clone <repository-url>
+cd nodejs-express-server
+
+# Start all services (API + PostgreSQL)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f api
+
+# Stop services
+docker-compose down
+```
+
+#### **Development with Docker**
+```bash
+# Start with development profile (hot reload)
+docker-compose --profile dev up -d
+
+# View development logs
+docker-compose logs -f api-dev
+
+# Stop development services
+docker-compose --profile dev down
+```
+
+#### **Docker Commands**
+```bash
+# Build production image
+docker build -t jairojobs-api:latest .
+
+# Build development image
+docker build -f Dockerfile.dev -t jairojobs-api:dev .
+
+# Run production container
+docker run -p 4010:4010 jairojobs-api:latest
+
+# Run with database
+docker-compose up -d db
+docker run --network jairojobs-network -p 4010:4010 jairojobs-api:latest
+```
+
+### **Option 2: Local Development**
+
+#### **1. Installation**
 ```bash
 # Clone the repository
 git clone <repository-url>
@@ -203,13 +264,13 @@ cd nodejs-express-server
 npm install
 ```
 
-### **2. Configuration**
+#### **2. Configuration**
 Edit `config.js` to customize:
 - **Port**: Default 4010
 - **File Upload Path**: Default `uploaded_files/`
 - **API Base URL**: Default `http://localhost:4010`
 
-### **3. Running the Server**
+#### **3. Running the Server**
 ```bash
 # Start the server
 npm start
@@ -245,11 +306,25 @@ curl -H "X-API-Key: test-key" "http://localhost:4010/v1/jobs/123e4567-e89b-12d3-
 node test-service.js
 ```
 
+### **Docker Testing**
+```bash
+# Test Docker container health
+docker-compose exec api curl http://localhost:4010/hello
+
+# Test database connection
+docker-compose exec db pg_isready -U jairojobs_user -d jairojobs
+
+# Test API endpoints in container
+docker-compose exec api curl -H "X-API-Key: test-key" http://localhost:4010/v1/jobs
+```
+
 ### **Manual Testing**
 - **Search Functionality**: Test with various query parameters
 - **Pagination**: Verify page limits and navigation
 - **Filtering**: Test location-based filtering
 - **Error Handling**: Test invalid requests and API keys
+- **Docker Health**: Verify container health checks
+- **Database Integration**: Test PostgreSQL connectivity
 
 ## 📦 **Dependencies**
 
@@ -285,6 +360,14 @@ node test-service.js
 5. **Error Handling**: Comprehensive error responses
 6. **Data Validation**: Full OpenAPI schema compliance
 
+### **Docker Infrastructure**
+1. **Multi-stage Builds**: Optimized production images (~150MB)
+2. **Development Environment**: Hot reload with volume mounting
+3. **Database Integration**: PostgreSQL with auto-initialization
+4. **Health Checks**: Automatic container monitoring
+5. **Security**: Non-root user implementation
+6. **Comprehensive Documentation**: Complete Docker setup guide
+
 ## 📈 **Performance & Scalability**
 
 ### **Current State**
@@ -292,12 +375,15 @@ node test-service.js
 - **Modular Architecture**: Supports microservices migration
 - **OpenAPI-First**: Enables API gateway integration
 - **Mock Data**: 23 job listings for testing
+- **Docker Ready**: Containerized deployment ready
 
 ### **Scalability Considerations**
 - **Database Integration**: Ready for PostgreSQL/MongoDB
 - **Caching**: Can add Redis for response caching
 - **Load Balancing**: Stateless design supports multiple instances
 - **API Gateway**: OpenAPI spec enables gateway integration
+- **Container Orchestration**: Ready for Kubernetes deployment
+- **Microservices**: Docker containers support service decomposition
 
 ## 🔮 **Future Enhancements**
 
@@ -310,6 +396,8 @@ node test-service.js
 6. **Monitoring**: Add application monitoring and metrics
 7. **Documentation**: Enhanced API documentation
 8. **CI/CD**: Automated testing and deployment pipeline
+9. **Kubernetes**: Container orchestration deployment
+10. **Service Mesh**: Istio or Linkerd integration
 
 ### **Security Enhancements**
 1. **Input Sanitization**: Enhanced security validation
@@ -331,6 +419,14 @@ node test-service.js
 - **Type Safety**: Parameters extracted based on OpenAPI definitions
 - **Documentation**: Auto-generated Swagger UI documentation
 
+### **Docker Development**
+- **Multi-stage Builds**: Optimize image size and security
+- **Non-root User**: Run containers as non-privileged user
+- **Health Checks**: Implement container health monitoring
+- **Volume Mounts**: Use volumes for persistent data
+- **Environment Variables**: Configure via environment variables
+- **Docker Compose**: Use for multi-service development
+
 ## 🤝 **Contributing**
 
 1. **Fork** the repository
@@ -349,9 +445,48 @@ For support and questions:
 - **Email**: support@jairojobs.com
 - **Documentation**: http://localhost:4010/api-docs
 - **OpenAPI Spec**: http://localhost:4010/openapi
+- **Docker Documentation**: See `DOCKER.md` for detailed Docker setup
+
+## 🐳 **Docker Quick Reference**
+
+### **Production Deployment**
+```bash
+# Start full stack
+docker-compose up -d
+
+# View logs
+docker-compose logs -f api
+
+# Stop services
+docker-compose down
+```
+
+### **Development Environment**
+```bash
+# Start with hot reload
+docker-compose --profile dev up -d
+
+# View development logs
+docker-compose logs -f api-dev
+
+# Rebuild and restart
+docker-compose build --no-cache && docker-compose up -d
+```
+
+### **Database Management**
+```bash
+# Connect to database
+docker-compose exec db psql -U jairojobs_user -d jairojobs
+
+# Backup database
+docker-compose exec db pg_dump -U jairojobs_user jairojobs > backup.sql
+
+# Restore database
+docker-compose exec -T db psql -U jairojobs_user -d jairojobs < backup.sql
+```
 
 ---
 
-**Last Updated**: July 29, 2025  
+**Last Updated**: January 27, 2025  
 **Version**: 1.0.0  
-**Status**: ✅ Production Ready (with mock data)
+**Status**: ✅ Production Ready (with mock data + Docker)
