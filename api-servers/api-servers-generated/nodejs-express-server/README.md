@@ -252,6 +252,24 @@ docker-compose up -d db
 docker run --network jairojobs-network -p 4010:4010 jairojobs-api:latest
 ```
 
+#### **Task Commands (Recommended)**
+```bash
+# Show all available tasks
+task
+
+# Start development environment
+task up-dev
+
+# View logs
+task logs-dev
+
+# Test API
+task test
+
+# Stop services
+task down
+```
+
 ### **Option 2: Local Development**
 
 #### **1. Installation**

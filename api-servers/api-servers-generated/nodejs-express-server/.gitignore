@@ -354,6 +354,9 @@ yarn.lock.bak
 .git/
 .gitignore.bak
 
+# Task
+Taskfile.yml.bak
+
 # Docker Compose override files (keep main docker-compose.yml)
 docker-compose.override.yml
 docker-compose.local.yml
