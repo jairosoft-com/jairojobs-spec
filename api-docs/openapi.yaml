@@ -170,6 +170,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
               example:
+                message: "Job not found"
                 code: 404
       operationId: getJobDetails
 components:
@@ -355,60 +356,143 @@ components:
           description: Whether the job is active or not.
           example: true
       example:
-        id: 123e4567-e89b-12d3-a456-426614174000
-        title: Senior Full Stack Developer
-        company: TechCorp Solutions
-        companyId: comp-456
-        companyLogo: https://via.placeholder.com/200x80/4A90E2/FFFFFF?text=TechCorp
-        location: San Francisco, CA
-        type: full-time
-        experienceLevel: senior
-        remoteOption: hybrid
-        salary:
-          min: 120000
-          max: 180000
-          currency: USD
-          period: yearly
-        description:
-          We are seeking a talented Senior Full Stack Developer to join our
-          growing engineering team. You will be responsible for developing and
-          maintaining web applications using modern technologies and best
-          practices.
-        requirements:
-          - 5+ years of experience in full-stack development
-          - Strong proficiency in JavaScript, TypeScript, and React
-          - Experience with Node.js and Express.js
-          - Knowledge of SQL and NoSQL databases
-          - Experience with cloud platforms (AWS, GCP, or Azure)
-          - Understanding of CI/CD pipelines and DevOps practices
-        responsibilities:
-          - Design and develop scalable web applications
-          - Collaborate with cross-functional teams to define and implement new
-            features
-          - Write clean, maintainable, and well-documented code
-          - Participate in code reviews and mentor junior developers
-          - Optimize applications for maximum speed and scalability
-          - Stay up-to-date with emerging technologies and industry trends
-        benefits:
-          - Competitive salary and equity package
-          - Comprehensive health, dental, and vision insurance
-          - Flexible work arrangements and remote work options
-          - Professional development budget for conferences and courses
-          - 401(k) matching program
-          - Unlimited PTO policy
-        tags:
-          - JavaScript
-          - TypeScript
-          - React
-          - Node.js
-          - Full Stack
-          - Senior
-          - Hybrid
-        postedAt: 2025-07-15T09:30:00Z
-        applicationDeadline: 2025-08-15T23:59:59Z
-        applicants: 42
-        featured: true
-        active: true
+        seniorFullStackDeveloper:
+          summary: Senior Full Stack Developer at TechCorp Solutions
+          value:
+            id: "1"
+            title: "Senior Full Stack Developer"
+            company: "TechCorp Solutions"
+            companyId: "1"
+            companyLogo: "/companies/techcorp.png"
+            location: "San Francisco, CA"
+            type: "full-time"
+            experienceLevel: "senior"
+            remoteOption: "hybrid"
+            salary:
+              min: 150000
+              max: 200000
+              currency: "USD"
+              period: "yearly"
+            description: |
+              We are looking for a Senior Full Stack Developer to join our growing engineering team. You will be responsible for designing and implementing scalable web applications using modern technologies.
+              As a senior member of the team, you'll mentor junior developers, participate in architectural decisions, and help shape our engineering culture.
+            requirements:
+              - 5+ years of experience in full-stack development
+              - Strong proficiency in React, Node.js, and TypeScript
+              - Experience with cloud platforms (AWS preferred)
+              - Solid understanding of database design and optimization
+              - Experience with microservices architecture
+              - Excellent communication and leadership skills
+            responsibilities:
+              - Design and develop scalable web applications
+              - Lead technical projects from conception to deployment
+              - Mentor junior developers and conduct code reviews
+              - Collaborate with product managers and designers
+              - Participate in on-call rotation for production support
+              - Contribute to architectural decisions and technical strategy
+            benefits:
+              - Competitive salary and equity
+              - Comprehensive health, dental, and vision insurance
+              - Unlimited PTO policy
+              - 401(k) with company matching
+              - Professional development budget
+              - Flexible work arrangements
+            tags: ["React", "Node.js", "TypeScript", "AWS", "Full Stack"]
+            postedAt: "2025-01-15T00:00:00.000Z"
+            applicationDeadline: "2025-02-28T00:00:00.000Z"
+            applicants: 42
+            featured: true
+            active: true
+        frontendEngineer:
+          summary: Frontend Engineer at StartupHub
+          value:
+            id: "2"
+            title: "Frontend Engineer"
+            company: "StartupHub"
+            companyId: "2"
+            companyLogo: "/companies/startuphub.png"
+            location: "New York, NY"
+            type: "full-time"
+            experienceLevel: "mid"
+            remoteOption: "remote"
+            salary:
+              min: 100000
+              max: 140000
+              currency: "USD"
+              period: "yearly"
+            description: |
+              Join our dynamic team as a Frontend Engineer and help build the future of digital payments. You'll work on cutting-edge fintech products used by millions of users worldwide.
+            requirements:
+              - 3+ years of experience in frontend development
+              - Expert knowledge of React and React Native
+              - Strong understanding of JavaScript/TypeScript
+              - Experience with state management (Redux, MobX, or similar)
+              - Knowledge of responsive design and cross-browser compatibility
+              - Passion for creating exceptional user experiences
+            responsibilities:
+              - Build and maintain responsive web applications
+              - Collaborate with designers to implement pixel-perfect UIs
+              - Optimize applications for maximum speed and scalability
+              - Write clean, maintainable, and testable code
+              - Participate in agile development processes
+            benefits:
+              - Competitive salary with equity
+              - Health, dental, and vision insurance
+              - Flexible working hours
+              - Remote-first culture
+              - Learning and development stipend
+            tags: ["React", "React Native", "TypeScript", "Fintech", "Remote"]
+            postedAt: "2025-01-20T00:00:00.000Z"
+            applicationDeadline: "2025-03-20T00:00:00.000Z"
+            applicants: 28
+            featured: false
+            active: true
+        devOpsEngineer:
+          summary: DevOps Engineer at Global Health Systems
+          value:
+            id: "3"
+            title: "DevOps Engineer"
+            company: "Global Health Systems"
+            companyId: "3"
+            companyLogo: "/companies/globalhealth.png"
+            location: "Boston, MA"
+            type: "full-time"
+            experienceLevel: "senior"
+            remoteOption: "hybrid"
+            salary:
+              min: 130000
+              max: 170000
+              currency: "USD"
+              period: "yearly"
+            description: |
+              We're seeking a DevOps Engineer to help us scale our healthcare platform. You'll work on critical infrastructure that powers applications used by healthcare providers nationwide.
+            requirements:
+              - 5+ years of DevOps/SRE experience
+              - Strong experience with AWS and cloud architecture
+              - Proficiency in Infrastructure as Code (Terraform, CloudFormation)
+              - Experience with container orchestration (Kubernetes)
+              - Knowledge of CI/CD pipelines and automation
+              - Understanding of HIPAA compliance and security best practices
+            responsibilities:
+              - Design and maintain scalable cloud infrastructure
+              - Implement and manage CI/CD pipelines
+              - Monitor system performance and ensure high availability
+              - Automate deployment and operational processes
+              - Ensure security and compliance standards are met
+              - Collaborate with development teams to improve deployment processes
+            benefits:
+              - Competitive compensation
+              - Excellent health coverage
+              - 4 weeks PTO
+              - Parental leave policy
+              - Professional development opportunities
+              - Mission-driven work environment
+            tags: ["AWS", "Kubernetes", "Terraform", "DevOps", "Healthcare"]
+            postedAt: "2025-01-18T00:00:00.000Z"
+            applicationDeadline: "2025-03-18T00:00:00.000Z"
+            applicants: 15
+            featured: true
+            active: true
     Pagination:
       type: object
       description: Pagination information for a list of items.

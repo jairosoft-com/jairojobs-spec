@@ -17,8 +17,8 @@ test.describe("Job Portal API Tests", () => {
       expect(response.status()).toBe(200);
       
       const responseBody = await response.json();
-      console.log(responseBody);
-      
+      console.log("responseBody:", responseBody);
+
       // Validate response structure
       expect(responseBody).toHaveProperty("jobs");
       expect(responseBody).toHaveProperty("pagination");
