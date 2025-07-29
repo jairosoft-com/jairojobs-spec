@@ -31,3 +31,4 @@ build/
 
 # .42c
 .42c/
+**/combined.log
