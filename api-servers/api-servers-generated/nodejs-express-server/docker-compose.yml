@@ -13,12 +13,9 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=4010
-      - DATABASE_URL=postgresql://jairojobs_user:jairojobs_pass@db:5432/jairojobs
     volumes:
       - ./logs:/app/logs
       - ./uploaded_files:/app/uploaded_files
-    depends_on:
-      - db
     networks:
       - jairojobs-network
     restart: unless-stopped
@@ -28,28 +25,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-
-  # PostgreSQL Database
-  db:
-    image: postgres:15-alpine
-    container_name: jairojobs-db
-    environment:
-      - POSTGRES_DB=jairojobs
-      - POSTGRES_USER=jairojobs_user
-      - POSTGRES_PASSWORD=jairojobs_pass
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
-    networks:
-      - jairojobs-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U jairojobs_user -d jairojobs"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   # Development API Service (with hot reload)
   api-dev:
@@ -63,24 +38,17 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=4010
-      - DATABASE_URL=postgresql://jairojobs_user:jairojobs_pass@db:5432/jairojobs
     volumes:
       - .:/app
       - /app/node_modules
       - ./logs:/app/logs
       - ./uploaded_files:/app/uploaded_files
-    depends_on:
-      - db
     networks:
       - jairojobs-network
     restart: unless-stopped
     command: ["npm", "start"]
     profiles:
       - dev
-
-volumes:
-  postgres_data:
-    driver: local
 
 networks:
   jairojobs-network:

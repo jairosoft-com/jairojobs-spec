@@ -4,8 +4,6 @@ vars:
   PROJECT_NAME: jairojobs-api
   DOCKER_IMAGE: jairojobs-api
   API_PORT: 4010
-  DB_NAME: jairojobs
-  DB_USER: jairojobs_user
 
 tasks:
   build:
@@ -48,15 +46,15 @@ tasks:
     cmds:
       - docker-compose exec api sh
 
-  db-shell:
-    desc: Connect to database
-    cmds:
-      - docker-compose exec db psql -U {{.DB_USER}} -d {{.DB_NAME}}
-
   test:
     desc: Test API endpoints
     cmds:
       - curl -f http://localhost:{{.API_PORT}}/hello || echo "API not responding"
+
+  test-all:
+    desc: Test API endpoints
+    cmds:
+      - task: test
 
   clean:
     desc: Clean up Docker resources

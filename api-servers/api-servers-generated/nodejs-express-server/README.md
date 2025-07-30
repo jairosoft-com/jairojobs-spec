@@ -2,7 +2,7 @@
 
 ## 🚀 **Project Overview**
 
-This is a **Node.js Express server** for the JairoJobs.com job portal MVP, generated using the OpenAPI Generator. The project follows an **API-first approach** where the OpenAPI specification drives the implementation, ensuring consistency and type safety.
+This is a **Node.js Express server** for the JairoJobs.com job portal MVP, generated using the OpenAPI Generator. The project follows an **API-first approach** where the OpenAPI specification drives the implementation, ensuring consistency and type safety. The API currently uses mock data and is containerized with Docker for easy deployment.
 
 ## 📋 **Prerequisites**
 
@@ -20,7 +20,7 @@ This is a **Node.js Express server** for the JairoJobs.com job portal MVP, gener
 
 ### **Layered Architecture**
 ```
-HTTP Request → Express Middleware → OpenAPI Validator → Controller → Service → Response
+HTTP Request → Express Middleware → OpenAPI Validator → Controller → Service (Mock Data) → Response
 ```
 
 ### **Key Design Principles**
@@ -56,7 +56,7 @@ nodejs-express-server/
 ├── docker-compose.yml            # Full stack with API and PostgreSQL
 ├── docker-compose.override.yml   # Development overrides
 ├── .dockerignore                 # Docker build exclusions
-├── init-db.sql                  # Database initialization script
+
 └── DOCKER.md                     # Comprehensive Docker documentation
 ```
 
@@ -316,6 +316,8 @@ curl -H "X-API-Key: test-key" "http://localhost:4010/v1/jobs/123e4567-e89b-12d3-
 - **Swagger UI**: http://localhost:4010/api-docs
 - **OpenAPI Spec**: http://localhost:4010/openapi
 
+
+
 ## 🧪 **Testing**
 
 ### **Service Testing**
@@ -329,9 +331,6 @@ node test-service.js
 # Test Docker container health
 docker-compose exec api curl http://localhost:4010/hello
 
-# Test database connection
-docker-compose exec db pg_isready -U jairojobs_user -d jairojobs
-
 # Test API endpoints in container
 docker-compose exec api curl -H "X-API-Key: test-key" http://localhost:4010/v1/jobs
 ```
@@ -342,7 +341,6 @@ docker-compose exec api curl -H "X-API-Key: test-key" http://localhost:4010/v1/j
 - **Filtering**: Test location-based filtering
 - **Error Handling**: Test invalid requests and API keys
 - **Docker Health**: Verify container health checks
-- **Database Integration**: Test PostgreSQL connectivity
 
 ## 📦 **Dependencies**
 
@@ -394,9 +392,10 @@ docker-compose exec api curl -H "X-API-Key: test-key" http://localhost:4010/v1/j
 - **OpenAPI-First**: Enables API gateway integration
 - **Mock Data**: 23 job listings for testing
 - **Docker Ready**: Containerized deployment ready
+- **API-Only**: No database dependencies, simplified deployment
 
 ### **Scalability Considerations**
-- **Database Integration**: Ready for PostgreSQL/MongoDB
+- **Database Integration**: Can add PostgreSQL/MongoDB for persistent data
 - **Caching**: Can add Redis for response caching
 - **Load Balancing**: Stateless design supports multiple instances
 - **API Gateway**: OpenAPI spec enables gateway integration
@@ -406,7 +405,7 @@ docker-compose exec api curl -H "X-API-Key: test-key" http://localhost:4010/v1/j
 ## 🔮 **Future Enhancements**
 
 ### **Planned Improvements**
-1. **Database Integration**: Replace mock data with real database
+1. **Database Integration**: Add PostgreSQL/MongoDB for persistent data storage
 2. **Authentication**: Implement JWT token validation
 3. **Rate Limiting**: Add request throttling
 4. **Caching**: Implement response caching
@@ -469,7 +468,7 @@ For support and questions:
 
 ### **Production Deployment**
 ```bash
-# Start full stack
+# Start API services
 docker-compose up -d
 
 # View logs
@@ -491,20 +490,10 @@ docker-compose logs -f api-dev
 docker-compose build --no-cache && docker-compose up -d
 ```
 
-### **Database Management**
-```bash
-# Connect to database
-docker-compose exec db psql -U jairojobs_user -d jairojobs
 
-# Backup database
-docker-compose exec db pg_dump -U jairojobs_user jairojobs > backup.sql
-
-# Restore database
-docker-compose exec -T db psql -U jairojobs_user -d jairojobs < backup.sql
-```
 
 ---
 
 **Last Updated**: January 27, 2025  
 **Version**: 1.0.0  
-**Status**: ✅ Production Ready (with mock data + Docker)
+**Status**: ✅ Production Ready (API-only with mock data + Docker)

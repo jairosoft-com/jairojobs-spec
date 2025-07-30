@@ -31,11 +31,9 @@ task down
 - `task logs-dev` - View development logs
 - `task status` - Show service status
 
-### **Database**
-- `task db-shell` - Connect to PostgreSQL database shell
-
 ### **Testing**
 - `task test` - Test API endpoints
+- `task test-all` - Test API endpoints
 
 ### **Development**
 - `task shell` - Open shell in API container
@@ -76,14 +74,7 @@ task logs
 task down
 ```
 
-### **Database Management**
-```bash
-# Connect to database
-task db-shell
 
-# Check service status
-task status
-```
 
 ## 📊 **Task Variables**
 
@@ -91,15 +82,12 @@ The Taskfile uses these variables:
 - `PROJECT_NAME`: jairojobs-api
 - `DOCKER_IMAGE`: jairojobs-api
 - `API_PORT`: 4010
-- `DB_NAME`: jairojobs
-- `DB_USER`: jairojobs_user
 
 ## 🔍 **Troubleshooting**
 
 ### **Common Issues**
 1. **Services not starting**: Run `task clean` then `task up-dev`
 2. **Port conflicts**: Check if port 4010 is in use
-3. **Database issues**: Run `task db-shell` to check connection
 
 ### **Useful Commands**
 ```bash
