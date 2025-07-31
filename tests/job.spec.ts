@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 
 const API_BASE_URL = "http://localhost:4010/v1";
 const API_KEY = "test-api-key-123"; // Replace with your actual API key
+const JOBID = "123e4567-e89b-12d3-a456-426614174000"; // Example job ID for testing
 
 test.describe("Job Portal API Tests", () => {
   
@@ -207,45 +208,24 @@ test.describe("Job Portal API Tests", () => {
   test.describe("GET /jobs/{jobId} - Get Job Details", () => {
     
     test("should return detailed job information for valid job ID", async ({ request }) => {
-      // First, get a list of jobs to get a valid job ID
-      const listResponse = await request.get(`${API_BASE_URL}/jobs?limit=1`, {
-        headers: {
-          "X-API-Key": API_KEY
-        }
+      const response = await request.get(`${API_BASE_URL}/jobs/${JOBID}`, {
+        headers: { "X-API-Key": API_KEY }
       });
-      
-      expect(listResponse.status()).toBe(200);
-      const listBody = await listResponse.json();
-      
-      if (listBody.jobs.length === 0) {
-        test.skip(true, "No jobs available for testing");
-        return;
-      }
-      
-      const jobId = listBody.jobs[0].id;
-      
-      // Now get the job details
-      const response = await request.get(`${API_BASE_URL}/jobs/${jobId}`, {
-        headers: {
-          "X-API-Key": API_KEY
-        }
-      });
-
       expect(response.status()).toBe(200);
       const responseBody = await response.json();
       
       // Validate required fields from Job schema
-      expect(responseBody).toHaveProperty("id", jobId);
-      expect(responseBody).toHaveProperty("jobTitle");
-      expect(responseBody).toHaveProperty("companyName");
+      expect(responseBody).toHaveProperty("id", JOBID);
+      expect(responseBody).toHaveProperty("title");
+      expect(responseBody).toHaveProperty("company");
       expect(responseBody).toHaveProperty("companyId");
       expect(responseBody).toHaveProperty("companyLogo");
       expect(responseBody).toHaveProperty("location");
-      expect(responseBody).toHaveProperty("jobType");
+      expect(responseBody).toHaveProperty("type");
       expect(responseBody).toHaveProperty("experienceLevel");
       expect(responseBody).toHaveProperty("remoteOption");
       expect(responseBody).toHaveProperty("salary");
-      expect(responseBody).toHaveProperty("jobDescription");
+      expect(responseBody).toHaveProperty("description");
       expect(responseBody).toHaveProperty("requirements");
       expect(responseBody).toHaveProperty("responsibilities");
       expect(responseBody).toHaveProperty("benefits");
@@ -258,10 +238,10 @@ test.describe("Job Portal API Tests", () => {
       
       // Validate data types
       expect(typeof responseBody.id).toBe("string");
-      expect(typeof responseBody.jobTitle).toBe("string");
-      expect(typeof responseBody.companyName).toBe("string");
+      expect(typeof responseBody.title).toBe("string");
+      expect(typeof responseBody.company).toBe("string");
       expect(typeof responseBody.companyId).toBe("string");
-      expect(typeof responseBody.jobDescription).toBe("string");
+      expect(typeof responseBody.description).toBe("string");
       expect(typeof responseBody.applicants).toBe("number");
       expect(typeof responseBody.featured).toBe("boolean");
       expect(typeof responseBody.active).toBe("boolean");
@@ -287,7 +267,7 @@ test.describe("Job Portal API Tests", () => {
       expect(typeof responseBody.salary.period).toBe("string");
       
       // Validate enum values
-      expect(["full-time", "part-time", "contract", "internship"]).toContain(responseBody.jobType);
+      expect(["full-time", "part-time", "contract", "internship"]).toContain(responseBody.type);
       expect(["entry", "mid", "senior"]).toContain(responseBody.experienceLevel);
       expect(["on-site", "hybrid", "remote"]).toContain(responseBody.remoteOption);
       

@@ -1,215 +1,259 @@
 openapi: 3.1.0
 info:
-  title: Job Portal API
-  description: API for the JairoJobs.com job portal MVP.
-  version: 1.0.0
   contact:
-    name: JairoJobs Support
     email: support@jairojobs.com
+    name: JairoJobs Support
+  description: API for the JairoJobs.com job portal MVP.
+  title: Job Portal API
+  version: 1.0.0
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
 servers:
-  - url: http://localhost:4010
-    description: Local Development Server
-  - url: https://api.jairojobs.com
-    description: Production Server
+- description: Development Server
+  url: http://localhost.com:4010
+- description: Production Server
+  url: https://api.jairojobs.com
 security:
-  - ApiKeyAuth: []
+- ApiKeyAuth: []
 tags:
-  - name: Jobs
-    description: Operations related to job listings.
+- description: Operations related to job listings.
+  name: Jobs
 paths:
   /v1/jobs:
     get:
-      tags:
-        - Jobs
-      summary: Search and List Jobs
-      description: Retrieves a paginated list of job postings, with optional filters for search query and location.
+      description: "Retrieves a paginated list of job postings, with optional filters\
+        \ for search query and location."
+      operationId: searchAndListJobs
       parameters:
-        - name: q
-          in: query
-          description: A search query to filter jobs by title, company, or description.
-          required: false
-          schema:
-            type: string
-            pattern: '^[a-zA-Z0-9\s]+$'
-            maxLength: 50
-          example: "developer"
-        - name: location
-          in: query
-          description: A location to filter jobs by.
-          required: false
-          schema:
-            type: string
-            pattern: '^[a-zA-Z0-9\s]+$'
-            maxLength: 50
-          example: "San Francisco"
-        - name: page
-          in: query
-          description: The page number to retrieve.
-          schema:
-            type: integer
-            default: 1
-            minimum: 1
-            maximum: 100
-            format: int32
-          examples:
-            default:
-              summary: Default page number
-              value: 1
-        - name: limit
-          in: query
-          description: The number of jobs to return per page.
-          schema:
-            type: integer
-            default: 10
-            minimum: 1
-            maximum: 100
-            format: int32
-          examples:
-            default:
-              summary: Default limit
-              value: 10
+      - description: "A search query to filter jobs by title, company, or description."
+        example: developer
+        explode: true
+        in: query
+        name: q
+        required: false
+        schema:
+          maxLength: 50
+          pattern: "^[a-zA-Z0-9\\s]+$"
+          type: string
+        style: form
+      - description: A location to filter jobs by.
+        example: San Francisco
+        explode: true
+        in: query
+        name: location
+        required: false
+        schema:
+          maxLength: 50
+          pattern: "^[a-zA-Z0-9\\s]+$"
+          type: string
+        style: form
+      - description: The page number to retrieve.
+        examples:
+          default:
+            summary: Default page number
+            value: 1
+        explode: true
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
+      - description: The number of jobs to return per page.
+        examples:
+          default:
+            summary: Default limit
+            value: 10
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          default: 10
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        style: form
       responses:
         "200":
-          description: A paginated list of jobs.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SearchAndListJobsResponse200Json"
+          description: A paginated list of jobs.
         "401":
-          description: Unauthorized. Invalid or missing API key.
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
               example:
                 code: 401
                 message: Unauthorized. Please provide a valid API key.
-        "403":
-          description: Forbidden.
-          content:
-            application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+          description: Unauthorized. Invalid or missing API key.
+        "403":
+          content:
+            application/json:
               example:
                 code: 403
                 message: Access denied. Invalid API key or insufficient permissions.
-        "404":
-          description: Not found.
-          content:
-            application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+          description: Forbidden.
+        "404":
+          content:
+            application/json:
               examples:
                 noJobsFound:
                   summary: No jobs found
                   value:
                     code: 404
-                    message: "No jobs found matching your criteria"
+                    message: No jobs found matching your criteria
                 invalidLocation:
                   summary: Invalid location
                   value:
                     code: 404
-                    message: "No jobs found in the specified location"
-        "406":
-          description: Not Acceptable. The requested content type is not supported.
-          content:
-            application/json:
+                    message: No jobs found in the specified location
               schema:
                 $ref: "#/components/schemas/Error"
+          description: Not found.
+        "406":
+          content:
+            application/json:
               example:
                 code: 406
                 message: Not Acceptable. The requested content type is not supported.
-        "429":
-          description: Too Many Requests.
-          content:
-            application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+          description: Not Acceptable. The requested content type is not supported.
+        "429":
+          content:
+            application/json:
               example:
                 code: 429
                 message: Too Many Requests. Please try again later.
-        default:
-          description: An unexpected server error occurred.
-          content:
-            application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+          description: Too Many Requests.
+        default:
+          content:
+            application/json:
               example:
                 code: 500
                 message: An internal server error occurred. Please try again later.
-      operationId: searchAndListJobs
-  /v1/jobs/{jobId}:
-    get:
-      tags:
-        - Jobs
-      summary: Get Job Details
-      description: Retrieves the full details for a specific job posting.
-      parameters:
-        - name: jobId
-          in: path
-          required: true
-          description: ID of the job to retrieve.
-          schema:
-            type: string
-            # Enforce UUID format for job IDs
-            pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
-          example: "123e4567-e89b-12d3-a456-426614174000"
-      responses:
-        "200":
-          description: Detailed information about the job.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/JobDetail"
-              example:
-                code: 200
-        "404":
-          description: Job not found.
-          content:
-            application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-              example:
-                message: "Job not found"
-                code: 404
+          description: An unexpected server error occurred.
+      summary: Search and List Jobs
+      tags:
+      - Jobs
+      x-eov-operation-handler: controllers/JobsController
+      x-openapi-router-controller: JobsController
+      x-openapi-router-service: JobsService
+  /v1/jobs/{jobId}:
+    get:
+      description: Retrieves the full details for a specific job posting.
       operationId: getJobDetails
+      parameters:
+      - description: ID of the job to retrieve.
+        example: 123e4567-e89b-12d3-a456-426614174000
+        explode: false
+        in: path
+        name: jobId
+        required: true
+        schema:
+          pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                code: 200
+              schema:
+                $ref: "#/components/schemas/JobDetail"
+          description: Detailed information about the job.
+        "404":
+          content:
+            application/json:
+              example:
+                code: 404
+                message: Job not found.
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Job not found.
+      summary: Get Job Details
+      tags:
+      - Jobs
+      x-eov-operation-handler: controllers/JobsController
+      x-openapi-router-controller: JobsController
+      x-openapi-router-service: JobsService
 components:
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      description: API key for accessing the job portal.
-      in: header
-      name: X-API-Key
   schemas:
-    JobSummary:
+    Company:
+      description: Company information for job postings
       type: object
-      description: A summary of a job listing.
       properties:
         id:
           type: string
-          description: Unique identifier for the job.
-          example: string
-        title:
+          description: Unique company identifier
+          example: "comp-001"
+          pattern: "^comp-[a-zA-Z0-9]+$"
+        name:
           type: string
-          description: The title of the job.
-          example: string
-        company:
+          description: Company name
+          example: "TechCorp Solutions"
+        logo:
           type: string
-          description: The name of the company posting the job.
-          example: string
-        location:
+          format: uri
+          description: Company logo URL
+          example: "https://via.placeholder.com/200x80/4A90E2/FFFFFF?text=TechCorp"
+        description:
           type: string
-          description: The location of the job.
-          example: string
-        type:
-          $ref: "#/components/schemas/JobSummaryJobType"
-        remoteOption:
-          $ref: "#/components/schemas/JobSummaryRemoteOption"
-        postedAt:
+          description: Company description
+          example: "Leading technology solutions provider specializing in cloud infrastructure and enterprise software."
+        website:
           type: string
-          format: date-time
-          description: The date the job was posted.
-          example: 2025-07-27T10:18:08.1029505Z
+          format: uri
+          description: Company website
+          example: "https://techcorp.example.com"
+        industry:
+          type: string
+          description: Industry type
+          example: "technology"
+        size:
+          type: string
+          description: Company size
+          enum: ["startup", "small", "medium", "large"]
+          example: "large"
+        founded:
+          type: integer
+          description: Founding year
+          example: 2010
+        headquarters:
+          type: string
+          description: Headquarters location
+          example: "San Francisco, CA"
+        verified:
+          type: boolean
+          description: Verification status
+          example: true
+        featured:
+          type: boolean
+          description: Featured company status
+          example: true
+      required:
+        - id
+        - name
+        - verified
+    JobSummary:
+      description: A summary of a job listing.
       example:
         id: string
         title: string
@@ -218,17 +262,41 @@ components:
         type: full-time
         remoteOption: on-site
         postedAt: 2025-07-27T10:18:08.0993652Z
+      properties:
+        id:
+          description: Unique identifier for the job.
+          example: string
+          type: string
+        title:
+          description: The title of the job.
+          example: string
+          type: string
+        company:
+          $ref: "#/components/schemas/Company"
+        location:
+          description: The location of the job.
+          example: string
+          type: string
+        type:
+          $ref: "#/components/schemas/JobSummaryJobType"
+        remoteOption:
+          $ref: "#/components/schemas/JobSummaryRemoteOption"
+        postedAt:
+          description: The date the job was posted.
+          example: 2025-07-27T10:18:08.1029505Z
+          format: date-time
+          type: string
     JobDetail:
-      description: Detailed information about a job posting.
       allOf:
-        - $ref: "#/components/schemas/Job"
+      - $ref: "#/components/schemas/Job"
+      description: Detailed information about a job posting.
       example:
         id: 789b1234-c56d-78e9-f012-345678901234
         title: Senior Software Engineer - Backend
         company: InnovateTech Inc.
         companyId: comp-789
         companyLogo: https://via.placeholder.com/200x80/28A745/FFFFFF?text=InnovateTech
-        location: Austin, TX
+        location: "Austin, TX"
         type: full-time
         experienceLevel: senior
         remoteOption: remote
@@ -237,47 +305,46 @@ components:
           max: 200000
           currency: USD
           period: yearly
-        description:
-          Join our dynamic backend engineering team to build scalable,
-          high-performance systems that power our platform serving millions of
-          users. You'll work with cutting-edge technologies and contribute to
-          architectural decisions that shape our technical future.
+        description: "Join our dynamic backend engineering team to build scalable,\
+          \ high-performance systems that power our platform serving millions of users.\
+          \ You'll work with cutting-edge technologies and contribute to architectural\
+          \ decisions that shape our technical future."
         requirements:
-          - 7+ years of backend development experience
-          - Expert knowledge of Python, Go, or Java
-          - Strong experience with microservices architecture
-          - Proficiency with containerization (Docker, Kubernetes)
-          - Experience with cloud platforms (AWS preferred)
-          - Knowledge of distributed systems and message queues
-          - Strong database design skills (PostgreSQL, Redis)
-          - Experience with monitoring and observability tools
+        - 7+ years of backend development experience
+        - "Expert knowledge of Python, Go, or Java"
+        - Strong experience with microservices architecture
+        - "Proficiency with containerization (Docker, Kubernetes)"
+        - Experience with cloud platforms (AWS preferred)
+        - Knowledge of distributed systems and message queues
+        - "Strong database design skills (PostgreSQL, Redis)"
+        - Experience with monitoring and observability tools
         responsibilities:
-          - Design and implement robust backend services and APIs
-          - Lead technical discussions and architectural decisions
-          - Mentor junior engineers and conduct code reviews
-          - Optimize system performance and scalability
-          - Collaborate with frontend and DevOps teams
-          - Participate in on-call rotation for production support
-          - Drive adoption of best practices and new technologies
+        - Design and implement robust backend services and APIs
+        - Lead technical discussions and architectural decisions
+        - Mentor junior engineers and conduct code reviews
+        - Optimize system performance and scalability
+        - Collaborate with frontend and DevOps teams
+        - Participate in on-call rotation for production support
+        - Drive adoption of best practices and new technologies
         benefits:
-          - Competitive salary with performance bonuses
-          - Comprehensive health, dental, vision, and mental health coverage
-          - 100% remote work with flexible hours
-          - $5,000 annual learning and development budget
-          - Stock options with high growth potential
-          - Unlimited PTO and sabbatical program
-          - Top-tier equipment and home office setup allowance
-          - Annual company retreats and team building events
+        - Competitive salary with performance bonuses
+        - "Comprehensive health, dental, vision, and mental health coverage"
+        - 100% remote work with flexible hours
+        - "$5,000 annual learning and development budget"
+        - Stock options with high growth potential
+        - Unlimited PTO and sabbatical program
+        - Top-tier equipment and home office setup allowance
+        - Annual company retreats and team building events
         tags:
-          - Python
-          - Go
-          - Microservices
-          - AWS
-          - Kubernetes
-          - Backend
-          - Senior
-          - Remote
-          - API Design
+        - Python
+        - Go
+        - Microservices
+        - AWS
+        - Kubernetes
+        - Backend
+        - Senior
+        - Remote
+        - API Design
         postedAt: 2025-07-20T14:30:00Z
         applicationDeadline: 2025-08-20T23:59:59Z
         applicants: 78
@@ -285,34 +352,73 @@ components:
         active: true
     Job:
       description: Full details of a job listing.
-      type: object
+      example:
+        id: 123e4567-e89b-12d3-a456-426614174000
+        title: Senior Full Stack Developer
+        company: TechCorp Solutions
+        companyId: comp-456
+        companyLogo: https://via.placeholder.com/200x80/4A90E2/FFFFFF?text=TechCorp
+        location: "San Francisco, CA"
+        type: full-time
+        experienceLevel: senior
+        remoteOption: hybrid
+        salary:
+          min: 120000
+          max: 180000
+          currency: USD
+          period: yearly
+        description: We are seeking a talented Senior Full Stack Developer to join
+          our growing engineering team. You will be responsible for developing and
+          maintaining web applications using modern technologies and best practices.
+        requirements:
+        - 5+ years of experience in full-stack development
+        - "Strong proficiency in JavaScript, TypeScript, and React"
+        - Experience with Node.js and Express.js
+        - Knowledge of SQL and NoSQL databases
+        - "Experience with cloud platforms (AWS, GCP, or Azure)"
+        - Understanding of CI/CD pipelines and DevOps practices
+        responsibilities:
+        - Design and develop scalable web applications
+        - Collaborate with cross-functional teams to define and implement new features
+        - "Write clean, maintainable, and well-documented code"
+        - Participate in code reviews and mentor junior developers
+        - Optimize applications for maximum speed and scalability
+        - Stay up-to-date with emerging technologies and industry trends
+        benefits:
+        - Competitive salary and equity package
+        - "Comprehensive health, dental, and vision insurance"
+        - Flexible work arrangements and remote work options
+        - Professional development budget for conferences and courses
+        - 401(k) matching program
+        - Unlimited PTO policy
+        tags:
+        - JavaScript
+        - TypeScript
+        - React
+        - Node.js
+        - Full Stack
+        - Senior
+        - Hybrid
+        postedAt: 2025-07-15T09:30:00Z
+        applicationDeadline: 2025-08-15T23:59:59Z
+        applicants: 42
+        featured: true
+        active: true
       properties:
         id:
-          type: string
           description: Unique identifier for the job.
-          example: "123e4567-e89b-12d3-a456-426614174000"
-        title:
+          example: 123e4567-e89b-12d3-a456-426614174000
           type: string
+        title:
           description: The title of the job.
           example: Senior Full Stack Developer
+          type: string
         company:
-          type: string
-          description: The name of the company posting the job.
-          example: TechCorp Solutions
-        companyId:
-          type: string
-          description: Unique identifier for the company.
-          pattern: "^comp-[a-zA-Z0-9]+$"
-          example: "comp-456"
-        companyLogo:
-          type: string
-          format: uri
-          description: URL to the company's logo.
-          example: https://via.placeholder.com/200x80/4A90E2/FFFFFF?text=TechCorp
+          $ref: "#/components/schemas/Company"
         location:
-          type: string
           description: The location of the job.
-          example: San Francisco, CA
+          example: "San Francisco, CA"
+          type: string
         type:
           $ref: "#/components/schemas/JobJobType"
         experienceLevel:
@@ -322,512 +428,369 @@ components:
         salary:
           $ref: "#/components/schemas/JobSalary"
         description:
-          type: string
           description: The full description of the job.
           example: string
+          type: string
         requirements:
-          $ref: "#/components/schemas/JobRequirements"
+          description: List of requirements for the job.
+          example:
+          - string
+          items:
+            description: A requirement for the job.
+            example: string
+            type: string
+          maxItems: 100
+          type: array
         responsibilities:
-          $ref: "#/components/schemas/JobResponsibilities"
+          description: List of responsibilities for the job.
+          example:
+          - string
+          items:
+            description: A responsibility for the job.
+            example: string
+            type: string
+          maxItems: 100
+          type: array
         benefits:
-          $ref: "#/components/schemas/JobBenefits"
+          description: List of benefits for the job.
+          example:
+          - string
+          items:
+            description: A benefit for the job.
+            example: string
+            type: string
+          maxItems: 100
+          type: array
         tags:
-          $ref: "#/components/schemas/JobTags"
+          description: List of tags for the job.
+          example:
+          - string
+          items:
+            description: A tag for the job.
+            example: string
+            type: string
+          maxItems: 100
+          type: array
         postedAt:
-          type: string
           description: The date the job was posted.
-          format: date-time
           example: 2025-07-27T10:18:08.1164963Z
-        applicationDeadline:
-          type: string
-          description: The deadline for applying for the job.
           format: date-time
+          type: string
+        applicationDeadline:
+          description: The deadline for applying for the job.
           example: 2025-07-27T10:18:08.1171925Z
+          format: date-time
+          type: string
         applicants:
-          type: integer
           description: The number of applicants for the job.
           example: 50
+          type: integer
         featured:
-          type: boolean
           description: Whether the job is featured or not.
           example: true
-        active:
           type: boolean
+        active:
           description: Whether the job is active or not.
           example: true
-      example:
-        seniorFullStackDeveloper:
-          summary: Senior Full Stack Developer at TechCorp Solutions
-          value:
-            id: "1"
-            title: "Senior Full Stack Developer"
-            company: "TechCorp Solutions"
-            companyId: "1"
-            companyLogo: "/companies/techcorp.png"
-            location: "San Francisco, CA"
-            type: "full-time"
-            experienceLevel: "senior"
-            remoteOption: "hybrid"
-            salary:
-              min: 150000
-              max: 200000
-              currency: "USD"
-              period: "yearly"
-            description: |
-              We are looking for a Senior Full Stack Developer to join our growing engineering team. You will be responsible for designing and implementing scalable web applications using modern technologies.
-              As a senior member of the team, you'll mentor junior developers, participate in architectural decisions, and help shape our engineering culture.
-            requirements:
-              - 5+ years of experience in full-stack development
-              - Strong proficiency in React, Node.js, and TypeScript
-              - Experience with cloud platforms (AWS preferred)
-              - Solid understanding of database design and optimization
-              - Experience with microservices architecture
-              - Excellent communication and leadership skills
-            responsibilities:
-              - Design and develop scalable web applications
-              - Lead technical projects from conception to deployment
-              - Mentor junior developers and conduct code reviews
-              - Collaborate with product managers and designers
-              - Participate in on-call rotation for production support
-              - Contribute to architectural decisions and technical strategy
-            benefits:
-              - Competitive salary and equity
-              - Comprehensive health, dental, and vision insurance
-              - Unlimited PTO policy
-              - 401(k) with company matching
-              - Professional development budget
-              - Flexible work arrangements
-            tags: ["React", "Node.js", "TypeScript", "AWS", "Full Stack"]
-            postedAt: "2025-01-15T00:00:00.000Z"
-            applicationDeadline: "2025-02-28T00:00:00.000Z"
-            applicants: 42
-            featured: true
-            active: true
-        frontendEngineer:
-          summary: Frontend Engineer at StartupHub
-          value:
-            id: "2"
-            title: "Frontend Engineer"
-            company: "StartupHub"
-            companyId: "2"
-            companyLogo: "/companies/startuphub.png"
-            location: "New York, NY"
-            type: "full-time"
-            experienceLevel: "mid"
-            remoteOption: "remote"
-            salary:
-              min: 100000
-              max: 140000
-              currency: "USD"
-              period: "yearly"
-            description: |
-              Join our dynamic team as a Frontend Engineer and help build the future of digital payments. You'll work on cutting-edge fintech products used by millions of users worldwide.
-            requirements:
-              - 3+ years of experience in frontend development
-              - Expert knowledge of React and React Native
-              - Strong understanding of JavaScript/TypeScript
-              - Experience with state management (Redux, MobX, or similar)
-              - Knowledge of responsive design and cross-browser compatibility
-              - Passion for creating exceptional user experiences
-            responsibilities:
-              - Build and maintain responsive web applications
-              - Collaborate with designers to implement pixel-perfect UIs
-              - Optimize applications for maximum speed and scalability
-              - Write clean, maintainable, and testable code
-              - Participate in agile development processes
-            benefits:
-              - Competitive salary with equity
-              - Health, dental, and vision insurance
-              - Flexible working hours
-              - Remote-first culture
-              - Learning and development stipend
-            tags: ["React", "React Native", "TypeScript", "Fintech", "Remote"]
-            postedAt: "2025-01-20T00:00:00.000Z"
-            applicationDeadline: "2025-03-20T00:00:00.000Z"
-            applicants: 28
-            featured: false
-            active: true
-        devOpsEngineer:
-          summary: DevOps Engineer at Global Health Systems
-          value:
-            id: "3"
-            title: "DevOps Engineer"
-            company: "Global Health Systems"
-            companyId: "3"
-            companyLogo: "/companies/globalhealth.png"
-            location: "Boston, MA"
-            type: "full-time"
-            experienceLevel: "senior"
-            remoteOption: "hybrid"
-            salary:
-              min: 130000
-              max: 170000
-              currency: "USD"
-              period: "yearly"
-            description: |
-              We're seeking a DevOps Engineer to help us scale our healthcare platform. You'll work on critical infrastructure that powers applications used by healthcare providers nationwide.
-            requirements:
-              - 5+ years of DevOps/SRE experience
-              - Strong experience with AWS and cloud architecture
-              - Proficiency in Infrastructure as Code (Terraform, CloudFormation)
-              - Experience with container orchestration (Kubernetes)
-              - Knowledge of CI/CD pipelines and automation
-              - Understanding of HIPAA compliance and security best practices
-            responsibilities:
-              - Design and maintain scalable cloud infrastructure
-              - Implement and manage CI/CD pipelines
-              - Monitor system performance and ensure high availability
-              - Automate deployment and operational processes
-              - Ensure security and compliance standards are met
-              - Collaborate with development teams to improve deployment processes
-            benefits:
-              - Competitive compensation
-              - Excellent health coverage
-              - 4 weeks PTO
-              - Parental leave policy
-              - Professional development opportunities
-              - Mission-driven work environment
-            tags: ["AWS", "Kubernetes", "Terraform", "DevOps", "Healthcare"]
-            postedAt: "2025-01-18T00:00:00.000Z"
-            applicationDeadline: "2025-03-18T00:00:00.000Z"
-            applicants: 15
-            featured: true
-            active: true
+          type: boolean
     Pagination:
-      type: object
       description: Pagination information for a list of items.
-      properties:
-        total:
-          type: integer
-          description: Total number of items.
-          example: 50
-        page:
-          type: integer
-          description: Current page number.
-          example: 50
-        limit:
-          type: integer
-          description: Items per page.
-          example: 50
-        totalPages:
-          type: integer
-          description: Total number of pages.
-          example: 50
       example:
         total: 50
         page: 50
         limit: 50
         totalPages: 50
+      properties:
+        total:
+          description: Total number of items.
+          example: 50
+          type: integer
+        page:
+          description: Current page number.
+          example: 50
+          type: integer
+        limit:
+          description: Items per page.
+          example: 50
+          type: integer
+        totalPages:
+          description: Total number of pages.
+          example: 50
+          type: integer
     Error:
-      type: object
       description: Error response schema.
+      example:
+        code: 0
+        message: message
       properties:
         code:
-          type: integer
           description: HTTP status code.
+          type: integer
         message:
-          type: string
           description: A human-readable error message.
+          type: string
       required:
-        - code
-        - message
+      - code
+      - message
     SearchAndListJobsResponse200Json:
-      type: object
-      description: Response schema for searching and listing jobs.
-      properties:
-        jobs:
-          $ref: "#/components/schemas/SearchAndListJobsResponse200JsonJobs"
-        pagination:
-          $ref: "#/components/schemas/Pagination"
       additionalProperties: false
+      description: Response schema for searching and listing jobs.
       example:
         jobs:
-          - id: "1"
-            title: "Senior Full Stack Developer"
-            company: "TechCorp Solutions"
-            location: "San Francisco, CA"
-            type: "full-time"
-            remoteOption: "hybrid"
-            postedAt: "2025-01-15T00:00:00.000Z"
-          - id: "2"
-            title: "Frontend Engineer"
-            company: "StartupHub"
-            location: "New York, NY"
-            type: "full-time"
-            remoteOption: "remote"
-            postedAt: "2025-01-20T00:00:00.000Z"
-          - id: "3"
-            title: "DevOps Engineer"
-            company: "Global Health Systems"
-            location: "Boston, MA"
-            type: "full-time"
-            remoteOption: "hybrid"
-            postedAt: "2025-01-18T00:00:00.000Z"
-          - id: "4"
-            title: "Junior Backend Developer"
-            company: "TechCorp Solutions"
-            location: "Austin, TX"
-            type: "full-time"
-            remoteOption: "on-site"
-            postedAt: "2025-01-22T00:00:00.000Z"
-          - id: "5"
-            title: "Product Designer"
-            company: "StartupHub"
-            location: "Remote"
-            type: "full-time"
-            remoteOption: "remote"
-            postedAt: "2025-01-19T00:00:00.000Z"
-          - id: "6"
-            title: "Backend Engineer"
-            company: "TechCorp Solutions"
-            location: "Austin, TX"
-            type: "full-time"
-            remoteOption: "on-site"
-            postedAt: "2025-01-20T00:00:00.000Z"
-          - id: "7"
-            title: "Product Manager"
-            company: "InnovateTech"
-            location: "Seattle, WA"
-            type: "full-time"
-            remoteOption: "hybrid"
-            postedAt: "2025-01-21T00:00:00.000Z"
-          - id: "8"
-            title: "DevOps Engineer"
-            company: "CloudScale"
-            location: "Denver, CO"
-            type: "full-time"
-            remoteOption: "remote"
-            postedAt: "2025-01-22T00:00:00.000Z"
-          - id: "9"
-            title: "Data Scientist"
-            company: "DataInsights"
-            location: "Boston, MA"
-            type: "full-time"
-            remoteOption: "hybrid"
-            postedAt: "2025-01-18T00:00:00.000Z"
-          - id: "10"
-            title: "QA Engineer"
-            company: "TechCorp Solutions"
-            location: "Portland, OR"
-            type: "full-time"
-            remoteOption: "on-site"
-            postedAt: "2025-01-19T00:00:00.000Z"
-          - id: "11"
-            title: "Mobile Developer"
-            company: "StartupHub"
-            location: "San Francisco, CA"
-            type: "full-time"
-            remoteOption: "remote"
-            postedAt: "2025-01-20T00:00:00.000Z"
-          - id: "12"
-            title: "Security Engineer"
-            company: "SecureNet"
-            location: "Washington, DC"
-            type: "full-time"
-            remoteOption: "hybrid"
-            postedAt: "2025-01-17T00:00:00.000Z"
-          - id: "13"
-            title: "Technical Writer"
-            company: "TechCorp Solutions"
-            location: "Remote"
-            type: "full-time"
-            remoteOption: "remote"
-            postedAt: "2025-01-21T00:00:00.000Z"
-          - id: "14"
-            title: "Cloud Architect"
-            company: "CloudScale"
-            location: "Chicago, IL"
-            type: "full-time"
-            remoteOption: "hybrid"
-            postedAt: "2025-01-16T00:00:00.000Z"
-          - id: "15"
-            title: "Marketing Manager"
-            company: "StartupHub"
-            location: "Miami, FL"
-            type: "full-time"
-            remoteOption: "hybrid"
-            postedAt: "2025-01-18T00:00:00.000Z"
-          - id: "16"
-            title: "Frontend Developer"
-            company: "InnovateTech"
-            location: "Phoenix, AZ"
-            type: "full-time"
-            remoteOption: "on-site"
-            postedAt: "2025-01-19T00:00:00.000Z"
-          - id: "17"
-            title: "Data Engineer"
-            company: "DataInsights"
-            location: "Atlanta, GA"
-            type: "full-time"
-            remoteOption: "remote"
-            postedAt: "2025-01-20T00:00:00.000Z"
-          - id: "18"
-            title: "Sales Engineer"
-            company: "TechCorp Solutions"
-            location: "Dallas, TX"
-            type: "full-time"
-            remoteOption: "hybrid"
-            postedAt: "2025-01-21T00:00:00.000Z"
-          - id: "19"
-            title: "AI/ML Engineer"
-            company: "InnovateTech"
-            location: "San Francisco, CA"
-            type: "full-time"
-            remoteOption: "hybrid"
-            postedAt: "2025-01-22T00:00:00.000Z"
-          - id: "20"
-            title: "HR Manager"
-            company: "GlobalHealth"
-            location: "Nashville, TN"
-            type: "full-time"
-            remoteOption: "on-site"
-            postedAt: "2025-01-19T00:00:00.000Z"
-          - id: "21"
-            title: "Systems Administrator"
-            company: "TechCorp Solutions"
-            location: "San Francisco, CA"
-            type: "full-time"
-            remoteOption: "hybrid"
-            postedAt: "2025-01-23T00:00:00.000Z"
-          - id: "22"
-            title: "Database Administrator"
-            company: "DataInsights"
-            location: "Remote"
-            type: "full-time"
-            remoteOption: "remote"
-            postedAt: "2025-01-24T00:00:00.000Z"
-          - id: "23"
-            title: "Junior Developer"
-            company: "StartupHub"
-            location: "New York, NY"
-            type: "full-time"
-            remoteOption: "hybrid"
-            postedAt: "2025-01-25T00:00:00.000Z"
+        - id: "1"
+          title: Senior Full Stack Developer
+          company: TechCorp Solutions
+          location: "San Francisco, CA"
+          type: full-time
+          remoteOption: hybrid
+          postedAt: 2025-01-15T00:00:00.000Z
+        - id: "2"
+          title: Frontend Engineer
+          company: StartupHub
+          location: "New York, NY"
+          type: full-time
+          remoteOption: remote
+          postedAt: 2025-01-20T00:00:00.000Z
+        - id: "3"
+          title: DevOps Engineer
+          company: Global Health Systems
+          location: "Boston, MA"
+          type: full-time
+          remoteOption: hybrid
+          postedAt: 2025-01-18T00:00:00.000Z
+        - id: "4"
+          title: Junior Backend Developer
+          company: TechCorp Solutions
+          location: "Austin, TX"
+          type: full-time
+          remoteOption: on-site
+          postedAt: 2025-01-22T00:00:00.000Z
+        - id: "5"
+          title: Product Designer
+          company: StartupHub
+          location: Remote
+          type: full-time
+          remoteOption: remote
+          postedAt: 2025-01-19T00:00:00.000Z
+        - id: "6"
+          title: Backend Engineer
+          company: TechCorp Solutions
+          location: "Austin, TX"
+          type: full-time
+          remoteOption: on-site
+          postedAt: 2025-01-20T00:00:00.000Z
+        - id: "7"
+          title: Product Manager
+          company: InnovateTech
+          location: "Seattle, WA"
+          type: full-time
+          remoteOption: hybrid
+          postedAt: 2025-01-21T00:00:00.000Z
+        - id: "8"
+          title: DevOps Engineer
+          company: CloudScale
+          location: "Denver, CO"
+          type: full-time
+          remoteOption: remote
+          postedAt: 2025-01-22T00:00:00.000Z
+        - id: "9"
+          title: Data Scientist
+          company: DataInsights
+          location: "Boston, MA"
+          type: full-time
+          remoteOption: hybrid
+          postedAt: 2025-01-18T00:00:00.000Z
+        - id: "10"
+          title: QA Engineer
+          company: TechCorp Solutions
+          location: "Portland, OR"
+          type: full-time
+          remoteOption: on-site
+          postedAt: 2025-01-19T00:00:00.000Z
+        - id: "11"
+          title: Mobile Developer
+          company: StartupHub
+          location: "San Francisco, CA"
+          type: full-time
+          remoteOption: remote
+          postedAt: 2025-01-20T00:00:00.000Z
+        - id: "12"
+          title: Security Engineer
+          company: SecureNet
+          location: "Washington, DC"
+          type: full-time
+          remoteOption: hybrid
+          postedAt: 2025-01-17T00:00:00.000Z
+        - id: "13"
+          title: Technical Writer
+          company: TechCorp Solutions
+          location: Remote
+          type: full-time
+          remoteOption: remote
+          postedAt: 2025-01-21T00:00:00.000Z
+        - id: "14"
+          title: Cloud Architect
+          company: CloudScale
+          location: "Chicago, IL"
+          type: full-time
+          remoteOption: hybrid
+          postedAt: 2025-01-16T00:00:00.000Z
+        - id: "15"
+          title: Marketing Manager
+          company: StartupHub
+          location: "Miami, FL"
+          type: full-time
+          remoteOption: hybrid
+          postedAt: 2025-01-18T00:00:00.000Z
+        - id: "16"
+          title: Frontend Developer
+          company: InnovateTech
+          location: "Phoenix, AZ"
+          type: full-time
+          remoteOption: on-site
+          postedAt: 2025-01-19T00:00:00.000Z
+        - id: "17"
+          title: Data Engineer
+          company: DataInsights
+          location: "Atlanta, GA"
+          type: full-time
+          remoteOption: remote
+          postedAt: 2025-01-20T00:00:00.000Z
+        - id: "18"
+          title: Sales Engineer
+          company: TechCorp Solutions
+          location: "Dallas, TX"
+          type: full-time
+          remoteOption: hybrid
+          postedAt: 2025-01-21T00:00:00.000Z
+        - id: "19"
+          title: AI/ML Engineer
+          company: InnovateTech
+          location: "San Francisco, CA"
+          type: full-time
+          remoteOption: hybrid
+          postedAt: 2025-01-22T00:00:00.000Z
+        - id: "20"
+          title: HR Manager
+          company: GlobalHealth
+          location: "Nashville, TN"
+          type: full-time
+          remoteOption: on-site
+          postedAt: 2025-01-19T00:00:00.000Z
+        - id: "21"
+          title: Systems Administrator
+          company: TechCorp Solutions
+          location: "San Francisco, CA"
+          type: full-time
+          remoteOption: hybrid
+          postedAt: 2025-01-23T00:00:00.000Z
+        - id: "22"
+          title: Database Administrator
+          company: DataInsights
+          location: Remote
+          type: full-time
+          remoteOption: remote
+          postedAt: 2025-01-24T00:00:00.000Z
+        - id: "23"
+          title: Junior Developer
+          company: StartupHub
+          location: "New York, NY"
+          type: full-time
+          remoteOption: hybrid
+          postedAt: 2025-01-25T00:00:00.000Z
         pagination:
           total: 23
           page: 1
           limit: 10
           totalPages: 3
-    SearchAndListJobsResponse200JsonJobs:
-      type: array
-      maxItems: 100
-      description: A list of job summaries.
-      items:
-        $ref: "#/components/schemas/JobSummary"
-      example:
-        - id: "1"
-          title: Developer
-          company: TechCorp
-          location: San Francisco
-          type: full-time
-          remoteOption: hybrid
-          postedAt: 2025-07-27T10:18:08.099
-    JobSalary:
-      type: object
-      description: Salary information for a job.
       properties:
-        min:
-          type: number
-          description: Minimum salary for the job.
-          format: float
-          example: 50
-        max:
-          type: number
-          description: Maximum salary for the job.
-          format: float
-          example: 50
-        currency:
-          type: string
-          description: The currency of the salary.
-          example: USD
-        period:
-          type: string
-          description: The period of the salary.
-          example: yearly
+        jobs:
+          description: A list of job summaries.
+          example:
+          - id: "1"
+            title: Developer
+            company: TechCorp
+            location: San Francisco
+            type: full-time
+            remoteOption: hybrid
+            postedAt: 2025-07-27T10:18:08.099
+          items:
+            $ref: "#/components/schemas/JobSummary"
+          maxItems: 100
+          type: array
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+    JobSalary:
+      description: Salary information for a job.
       example:
         min: 50
         max: 50
         currency: USD
         period: yearly
-    JobRequirements:
-      type: array
-      maxItems: 100
-      description: List of requirements for the job.
-      items:
-        type: string
-        description: A requirement for the job.
-        example: string
-      example:
-        - string
-    JobResponsibilities:
-      type: array
-      maxItems: 100
-      description: List of responsibilities for the job.
-      items:
-        type: string
-        description: A responsibility for the job.
-        example: string
-      example:
-        - string
-    JobBenefits:
-      type: array
-      maxItems: 100
-      description: List of benefits for the job.
-      items:
-        type: string
-        description: A benefit for the job.
-        example: string
-      example:
-        - string
-    JobTags:
-      type: array
-      maxItems: 100
-      description: List of tags for the job.
-      items:
-        type: string
-        description: A tag for the job.
-        example: string
-      example:
-        - string
+      properties:
+        min:
+          description: Minimum salary for the job.
+          example: 50
+          format: float
+          type: number
+        max:
+          description: Maximum salary for the job.
+          example: 50
+          format: float
+          type: number
+        currency:
+          description: The currency of the salary.
+          example: USD
+          type: string
+        period:
+          description: The period of the salary.
+          example: yearly
+          type: string
     JobSummaryJobType:
-      type: string
       description: The type of employment.
       enum:
-        - full-time
-        - part-time
-        - contract
-        - internship
+      - full-time
+      - part-time
+      - contract
+      - internship
       example: full-time
-    JobSummaryRemoteOption:
       type: string
+    JobSummaryRemoteOption:
       description: The remote work option.
       enum:
-        - on-site
-        - hybrid
-        - remote
+      - on-site
+      - hybrid
+      - remote
       example: on-site
-    JobJobType:
       type: string
+    JobJobType:
       description: The type of employment.
       enum:
-        - full-time
-        - part-time
-        - contract
-        - internship
+      - full-time
+      - part-time
+      - contract
+      - internship
       example: full-time
-    JobExperienceLevel:
       type: string
+    JobExperienceLevel:
       description: The required experience level.
       enum:
-        - entry
-        - mid
-        - senior
+      - entry
+      - mid
+      - senior
       example: senior
-    JobRemoteOption:
       type: string
+    JobRemoteOption:
       description: The remote work option.
       enum:
-        - on-site
-        - hybrid
-        - remote
+      - on-site
+      - hybrid
+      - remote
       example: hybrid
+      type: string
+  securitySchemes:
+    ApiKeyAuth:
+      description: API key for accessing the job portal.
+      in: header
+      name: X-API-Key
+      type: apiKey
