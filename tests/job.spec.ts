@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 
-const API_BASE_URL = "http://localhost:4010/v1";
+// const API_BASE_URL = "http://localhost:4010/v1";
+const API_BASE_URL = "https://jairojobs2025.proudwater-1bd764bc.westus2.azurecontainerapps.io/v1";
 const API_KEY = "test-api-key-123"; // Replace with your actual API key
 const JOBID = "123e4567-e89b-12d3-a456-426614174000"; // Example job ID for testing
 const INVALIDJOBID = "123e4567-e89b-12d3-a456-426614174123"; // Example job ID for testing
