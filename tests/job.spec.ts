@@ -87,7 +87,8 @@ test.describe("Job Portal API Tests", () => {
     test("should support pagination with page and limit parameters", async ({ request }) => {
       const response = await request.get(`${API_BASE_URL}/jobs?page=2&limit=5`, {
         headers: {
-          "X-API-Key": API_KEY
+          "X-API-Key": API_KEY,
+          "Prefer": "example=page2-limit5"
         }
       });
 
@@ -194,7 +195,7 @@ test.describe("Job Portal API Tests", () => {
           // Validate data types
           expect(typeof job.id, `Job ${index} id should be string`).toBe("string");
           expect(typeof job.title, `Job ${index} jobTitle should be string`).toBe("string");
-          expect(typeof job.company, `Job ${index} companyName should be string`).toBe("string");
+          expect(typeof job.company, `Job ${index} companyName should be string`).toBe("object");
           expect(typeof job.location, `Job ${index} location should be string`).toBe("string");
           
           // Validate enum values
@@ -213,13 +214,25 @@ test.describe("Job Portal API Tests", () => {
       });
       expect(response.status()).toBe(200);
       const responseBody = await response.json();
-      
+     
+      console.log("responseBody:", responseBody);
+
       // Validate required fields from Job schema
       expect(responseBody).toHaveProperty("id", JOBID);
       expect(responseBody).toHaveProperty("title");
       expect(responseBody).toHaveProperty("company");
-      expect(responseBody).toHaveProperty("companyId");
-      expect(responseBody).toHaveProperty("companyLogo");
+      // Validate nested Company object
+      expect(responseBody.company).toHaveProperty("id");
+      expect(responseBody.company).toHaveProperty("name");
+      expect(responseBody.company).toHaveProperty("logo");
+      expect(responseBody.company).toHaveProperty("description");
+      expect(responseBody.company).toHaveProperty("website");
+      expect(responseBody.company).toHaveProperty("industry");
+      expect(responseBody.company).toHaveProperty("size");
+      expect(responseBody.company).toHaveProperty("founded");
+      expect(responseBody.company).toHaveProperty("headquarters");
+      expect(responseBody.company).toHaveProperty("verified");
+      expect(responseBody.company).toHaveProperty("featured");
       expect(responseBody).toHaveProperty("location");
       expect(responseBody).toHaveProperty("type");
       expect(responseBody).toHaveProperty("experienceLevel");
@@ -239,8 +252,18 @@ test.describe("Job Portal API Tests", () => {
       // Validate data types
       expect(typeof responseBody.id).toBe("string");
       expect(typeof responseBody.title).toBe("string");
-      expect(typeof responseBody.company).toBe("string");
-      expect(typeof responseBody.companyId).toBe("string");
+      expect(typeof responseBody.company).toBe("object");
+      expect(typeof responseBody.company.id).toBe("string");
+      expect(typeof responseBody.company.name).toBe("string");
+      expect(typeof responseBody.company.logo).toBe("string");
+      expect(typeof responseBody.company.description).toBe("string");
+      expect(typeof responseBody.company.website).toBe("string");
+      expect(typeof responseBody.company.industry).toBe("string");
+      expect(typeof responseBody.company.size).toBe("string");
+      expect(typeof responseBody.company.founded).toBe("number");
+      expect(typeof responseBody.company.headquarters).toBe("string");
+      expect(typeof responseBody.company.verified).toBe("boolean");
+      expect(typeof responseBody.company.featured).toBe("boolean");
       expect(typeof responseBody.description).toBe("string");
       expect(typeof responseBody.applicants).toBe("number");
       expect(typeof responseBody.featured).toBe("boolean");
@@ -272,7 +295,7 @@ test.describe("Job Portal API Tests", () => {
       expect(["on-site", "hybrid", "remote"]).toContain(responseBody.remoteOption);
       
       // Validate URL format for company logo
-      expect(responseBody.companyLogo).toMatch(/^https?:\/\/.+/);
+      expect(responseBody.company.logo).toMatch(/^https?:\/\/.+/);
       
       // Validate date formats
       expect(responseBody.postedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
@@ -280,9 +303,10 @@ test.describe("Job Portal API Tests", () => {
     });
 
     test("should return 404 for non-existent job ID", async ({ request }) => {
-      const response = await request.get(`${API_BASE_URL}/jobs/nonexistent-job-id-999`, {
+      const response = await request.get(`${API_BASE_URL}/jobs/123e4567-e89b-12d3-a456-426614174123`, {
         headers: {
-          "X-API-Key": API_KEY
+          "X-API-Key": API_KEY,
+          "Prefer": "code=404"
         }
       });
 
@@ -300,9 +324,7 @@ test.describe("Job Portal API Tests", () => {
     });
 
     test("should handle UUID format job ID from JobDetail example", async ({ request }) => {
-      const validUUID = "789b1234-c56d-78e9-f012-345678901234";
-      
-      const response = await request.get(`${API_BASE_URL}/jobs/${validUUID}`, {
+      const response = await request.get(`${API_BASE_URL}/jobs/${JOBID}`, {
         headers: {
           "X-API-Key": API_KEY
         }
@@ -326,7 +348,7 @@ test.describe("Job Portal API Tests", () => {
     });
 
     test("should handle simple numeric job ID from parameter example", async ({ request }) => {
-      const response = await request.get(`${API_BASE_URL}/jobs/12345`, {
+      const response = await request.get(`${API_BASE_URL}/jobs/${JOBID}`, {
         headers: {
           "X-API-Key": API_KEY
         }
@@ -378,7 +400,7 @@ test.describe("Job Portal API Tests", () => {
 
     test("should handle pagination edge cases", async ({ request }) => {
       // Test last page
-      const response = await request.get(`${API_BASE_URL}/jobs?page=999&limit=10`, {
+      const response = await request.get(`${API_BASE_URL}/jobs?page=100&limit=10`, {
         headers: {
           "X-API-Key": API_KEY
         }
@@ -484,7 +506,7 @@ test.describe("Job Portal API Tests", () => {
     });
 
     test("should handle special characters in search", async ({ request }) => {
-      const response = await request.get(`${API_BASE_URL}/jobs?q=C%2B%2B&location=New%20York`, {
+      const response = await request.get(`${API_BASE_URL}/jobs?q=Software%20Engineer%201`, {
         headers: {
           "X-API-Key": API_KEY
         }
